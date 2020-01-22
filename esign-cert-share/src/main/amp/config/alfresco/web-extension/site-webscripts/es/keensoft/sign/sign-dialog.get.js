@@ -65,8 +65,9 @@ function getNow() {
 	var hour = now.getHours();
 	var minutes = now.getMinutes();
 	
+	var isDaylightSavingsTime = now.getTimezoneOffset() < Math.max(new Date(now.getFullYear(), 0, 1).getTimezoneOffset(), new Date(now.getFullYear(), 6, 1).getTimezoneOffset());
 	var timezoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
-	if(timezoneAbbr == "GMT+1")
+	if((timezoneAbbr == "GMT+1" && !isDaylightSavingsTime) || (timezoneAbbr == "GMT+2" && isDaylightSavingsTime))
 		timezoneAbbr = "CET";
 
 	return day + "." + month + "." + year + "{space}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
