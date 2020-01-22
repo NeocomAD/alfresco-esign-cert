@@ -64,7 +64,12 @@ function getNow() {
 	var year = now.getFullYear();
 	var hour = now.getHours();
 	var minutes = now.getMinutes();
-	return day + "." + month + "." + year + "{space}" + formatNumber(hour) + ":" + formatNumber(minutes);
+	
+	var timezoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
+	if(timezoneAbbr == "GMT+1")
+		timezoneAbbr = "CET";
+
+	return day + "." + month + "." + year + "{space}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
 }
 
 function formatNumber(number) {

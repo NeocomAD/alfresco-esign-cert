@@ -8,9 +8,9 @@
 					<img src="/share/sign/icon.gif" >
 				</div>
 				<#if mimeType == "pdf">
-				<div style="width: 50%; float:left; display: inline-block">
+				<div style="width: 100%; float:left; display: inline-block">
 					<div id="position-text">${msg("document.position")}</div>
-					<select id="signaturePlace" style="width: 95%;">
+					<select id="signaturePlace" style="width: 100%;">
 						<#if showOptionFirstSignature>
 						<option value="sig1">${msg("select.sig1")}</option>
 						</#if>
@@ -26,16 +26,16 @@
 						<option value="sig5">${msg("select.sig5")}</option>
 					</select>
 				</div>
-				<div style="width: 50%;  display: inline-block">
+				<!--<div style="width: 50%;  display: inline-block">
 					<div id="pageTitle">${msg("page")}}</div>
-					<select id="signaturePage" style="width: 95%;">
+					<select id="signaturePage" style="width: 100%;">
 						<option value="last">${msg("page.last")}</option>
 						<option value="first">${msg("page.first")}</option>
 					</select>	
 					<#if serverDate??>
 					 ${serverDate}
 					</#if>
-				</div>	
+				</div>-->
 				</#if>					  								  			
 				<div id="sign-component" style="width:100%;"></div>	 
 			</div>			
@@ -87,12 +87,12 @@
 
 	      		function chosePosition() {
 	      			var position = YAHOO.util.Dom.get("signaturePlace").value;
-	      			var pageSelect = YAHOO.util.Dom.get("signaturePage").value;
+	      			var pageSelect = "last"; //YAHOO.util.Dom.get("signaturePage").value;
 	      			YAHOO.util.Dom.get("button-div").style.display = "none";
 	      			YAHOO.util.Dom.get("position-text").style.display = "none";
 	      			YAHOO.util.Dom.get("signaturePlace").style.display = "none";
-	      			YAHOO.util.Dom.get("signaturePage").style.display = "none";
-	      			YAHOO.util.Dom.get("pageTitle").style.display = "none";
+	      			//YAHOO.util.Dom.get("signaturePage").style.display = "none";
+	      			//YAHOO.util.Dom.get("pageTitle").style.display = "none";
 	      			YAHOO.util.Dom.get("loading-text").style.display = "block";
 	      			YAHOO.util.Dom.get("loading").style.display = "block";
 	      			
@@ -122,10 +122,10 @@
 	      				YAHOO.util.Dom.get("signerPostition").value = "5";
 	      			}
 	      			
-	      			if(pageSelect == "first")
+	      			/*if(pageSelect == "first")
 	      			{
 	      				page = "1";
-	      			}
+	      			}*/
 	      			
 	      			finalSignaturePosition = finalSignaturePosition.replace("{page}", page);
 	      			loadingFrameInterval = window.setInterval(checkZIndex, 500);

@@ -12,7 +12,7 @@
 			});
 			
 			this.widgets.signDialog = new Alfresco.module.SimpleDialog("signDialog").setOptions({
-				width : "50em",
+				width : "30em",
 				templateUrl : Alfresco.constants.URL_SERVICECONTEXT + "keensoft/sign/sign-dialog?nodeRef=" + record.nodeRef + "&mimeType=" + params["mimeType"],
 				actionUrl : Alfresco.constants.PROXY_URI + "keensoft/sign/save-sign",
 				destroyOnHide : true,
@@ -22,7 +22,10 @@
 							text : this.msg("message.sign-action.success"),
 							displayTime : 3
 						});
-                        YAHOO.Bubbling.fire("metadataRefresh");
+                        //YAHOO.Bubbling.fire("metadataRefresh");
+						setTimeout(function(){
+							window.location.reload();
+						}, 3000);
 					},
 					scope : this
 				},
