@@ -34,7 +34,7 @@ function main() {
 	
 	if(signatureParams.useServerTime == true) {
 		var dateTime = getNow();
-		var signatureFormat = "\tlayer2Text=$$SUBJECTCN$${space}" + dateTime + "\tlayer2FontSize=8";
+		var signatureFormat = "\tlayer2Text=$$SUBJECTCN$${newline}" + dateTime /*+ "\tlayer2FontSize=8"*/;
 		model.firstSignaturePosition += signatureFormat;
 		model.secondSignaturePosition += signatureFormat;
 		model.thirdSignaturePosition += signatureFormat;
@@ -70,7 +70,7 @@ function getNow() {
 	if((timezoneAbbr == "GMT+1" && !isDaylightSavingsTime) || (timezoneAbbr == "GMT+2" && isDaylightSavingsTime))
 		timezoneAbbr = "CET";
 
-	return day + "." + month + "." + year + "{space}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
+	return day + "." + month + "." + year + "{newline}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
 }
 
 function formatNumber(number) {
