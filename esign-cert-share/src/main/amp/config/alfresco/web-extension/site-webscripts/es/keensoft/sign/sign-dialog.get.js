@@ -69,10 +69,10 @@ function getNow() {
 	var timezoneAbbr = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2];
 	if((timezoneAbbr == "GMT+1" && !isDaylightSavingsTime) || (timezoneAbbr == "GMT+2" && isDaylightSavingsTime))
 		timezoneAbbr = "CET";
-
-	return day + "." + month + "." + year + "{newline}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
+	
+	return formatNumber(day) + "." + formatNumber(month) + "." + year + "{newline}" + formatNumber(hour) + ":" + formatNumber(minutes) + "{space}" + timezoneAbbr;
 }
 
 function formatNumber(number) {
-	return number < 9 ? '0' + number : number;
+	return number < 10 ? '0' + number : number;
 }
