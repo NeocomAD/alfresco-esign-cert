@@ -56,7 +56,7 @@ public class CustomBehaviour implements
 	@Override
 	public void onCreateNode(ChildAssociationRef childNodeRef) {
 
-		NodeRef node = childNodeRef.getChildRef();
+		/*NodeRef node = childNodeRef.getChildRef();
 		if (nodeService.exists(node)) {
 			ContentData contentData = (ContentData) nodeService.getProperty(node, ContentModel.PROP_CONTENT);
 			// Do this check only if the uploaded document is a PDF
@@ -83,7 +83,7 @@ public class CustomBehaviour implements
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override

@@ -4,8 +4,9 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="sign:type" />
-					<show id="sign:signatureAssoc" />
+					<!-- hidden to circumvent a metadata issue -->
+					<hide id="sign:type" />
+					<hide id="sign:signatureAssoc" />
 				</field-visibility>
 				<appearance>
 					<set id="signed" appearance="bordered-panel" label-id="panel.signed" />
