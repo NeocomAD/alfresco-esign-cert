@@ -69,7 +69,16 @@
                </association>
             </associations>
         </aspect>
-        
+		
+		<!-- Neocom addition for preventing duplicate signatures -->
+		<aspect name="sign:signerUsernames">
+			<properties>
+                <property name="sign:signerUsernamesList">
+                    <type>d:text</type>
+					<mandatory>true</mandatory>
+                </property>
+            </properties>
+		</aspect>
     </aspects>	
 	
 </model>

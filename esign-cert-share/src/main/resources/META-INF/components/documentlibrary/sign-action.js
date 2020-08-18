@@ -5,6 +5,11 @@
 			
 			var params = this.getAction(record, owner).params;
 			
+			this.widgets.notifyAlreadySignedDialog = Alfresco.util.PopupManager.displayMessage({
+				text : this.msg("message.sign-action.already-signed"),
+				displayTime : 5
+			});
+			
 			this.widgets.waitDialog = Alfresco.util.PopupManager.displayMessage({
 				text : this.msg("document.loading"),
 				spanClass : "wait",
@@ -46,6 +51,20 @@
 					scope : this
 				}
 			});
+			
+			console.log("this is record", record);
+			if (record.node.aspects.indexOf("sign:signerUsernames") != -1 || record.node.aspects.indexOf("sign_signerUsernames") != -1) {
+				var property = record.node.properties["sign:signerUsernamesList"];
+				if (!property)
+					property = record.node.properties["sign_signerUsernamesList"];
+				if(property) {
+					var userHasAlreadySignedDocument = property.indexOf(Alfresco.constants.USERNAME) != -1;
+					if(userHasAlreadySignedDocument) {
+						this.widgets.notifyAlreadySignedDialog.show();
+						return;
+					}
+				}
+			}
 
 			this.widgets.signDialog.show();
 		}

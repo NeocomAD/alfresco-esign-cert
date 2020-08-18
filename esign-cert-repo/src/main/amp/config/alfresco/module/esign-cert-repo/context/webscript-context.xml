@@ -23,6 +23,7 @@
 		<property name="contentService" ref="ContentService" />
 		<property name="versionService" ref="VersionService" />
 		<property name="checkOutCheckInService" ref="CheckOutCheckInService" />
+		<property name="authenticationService" ref="AuthenticationService" />
 		<property name="nodeService" ref="NodeService" />
 	</bean>
 

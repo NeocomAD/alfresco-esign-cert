@@ -16,6 +16,7 @@ import java.util.Map;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.service.cmr.coci.CheckOutCheckInService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
@@ -54,6 +55,7 @@ public class SaveSign extends AbstractWebScript {
 	private static final String PADES = "PAdES";
 	private static final String CSIG_EXTENSION = ".CSIG";
 	
+	private AuthenticationService authenticationService;
 	private CheckOutCheckInService checkOutCheckInService;
 	private VersionService versionService;
 	private ContentService contentService;
@@ -100,8 +102,19 @@ public class SaveSign extends AbstractWebScript {
 			}
 			nodeService.addAspect(nodeRef, SignModel.ASPECT_SIGNED, aspectSignedProperties);
 			
-			response.setCode(RETURN_CODE_OK);
+			// Neocom addition
+			final String currentUsername = authenticationService.getCurrentUserName();
+			if (!nodeService.hasAspect(nodeRef, SignModel.ASPECT_SIGNER_USERNAMES)) {
+				Map<QName, Serializable> aspectSignerUsernamesProperties = new HashMap<QName, Serializable>();
+				aspectSignerUsernamesProperties.put(SignModel.PROP_SIGNER_USERNAMES_LIST, currentUsername);
+				nodeService.addAspect(nodeRef, SignModel.ASPECT_SIGNER_USERNAMES, aspectSignerUsernamesProperties);
+			} else {
+				String signerUsernamesList = (String)nodeService.getProperty(nodeRef, SignModel.PROP_SIGNER_USERNAMES_LIST);
+				signerUsernamesList += "," + currentUsername;
+				nodeService.setProperty(nodeRef, SignModel.PROP_SIGNER_USERNAMES_LIST, signerUsernamesList);
+			}
 			
+			response.setCode(RETURN_CODE_OK);
 		} catch (Exception e) {
 			throw new WebScriptException(e.getMessage(), e);
 		}
@@ -199,6 +212,13 @@ public class SaveSign extends AbstractWebScript {
 	    return aspectSignatureProperties;
 	}
 	
+	public AuthenticationService getAuthenticationService() {
+		return authenticationService;
+	}
+
+	public void setAuthenticationService(AuthenticationService authenticationService) {
+		this.authenticationService = authenticationService;
+	}
 	
 	public CheckOutCheckInService getCheckOutCheckInService() {
 		return checkOutCheckInService;

@@ -24,5 +24,9 @@ public class SignModel {
 	public static final QName PROP_CERTIFICATE_SERIAL_NUMBER = QName.createQName(URI, "certificateSerialNumber");
 	public static final QName PROP_CERTIFICATE_ISSUER = QName.createQName(URI, "certificateIssuer");
 	public static final QName ASSOC_DOC = QName.createQName(URI, "docAssoc");
-
+	
+	// Neocom addition
+	public static final QName ASPECT_SIGNER_USERNAMES = QName.createQName(URI, "signerUsernames");
+	public static final QName PROP_SIGNER_USERNAMES_LIST = QName.createQName(URI, "signerUsernamesList");
+	
 }
