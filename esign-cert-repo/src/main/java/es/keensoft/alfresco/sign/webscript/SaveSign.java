@@ -42,7 +42,6 @@ import es.keensoft.alfresco.model.SignModel;
 import es.keensoft.alfresco.sign.webscript.bean.BasicResponse;
 import es.keensoft.alfresco.sign.webscript.bean.SaveSignRequest;
 
-
 public class SaveSign extends AbstractWebScript {
 	
 	private static Log log = LogFactory.getLog(SaveSign.class);
@@ -55,7 +54,6 @@ public class SaveSign extends AbstractWebScript {
 	private static final String PADES = "PAdES";
 	private static final String CSIG_EXTENSION = ".CSIG";
 	
-	private AuthenticationService authenticationService;
 	private CheckOutCheckInService checkOutCheckInService;
 	private VersionService versionService;
 	private ContentService contentService;
@@ -67,6 +65,11 @@ public class SaveSign extends AbstractWebScript {
 		Gson gson = new Gson();
 		SaveSignRequest request;
 		BasicResponse response = new BasicResponse();
+		
+		String realUsername = req.getParameter("real_username");
+		if (realUsername == null) {
+			realUsername = "realUsername-parameter-null";
+		}
 		
 		try {
 			
@@ -103,14 +106,14 @@ public class SaveSign extends AbstractWebScript {
 			nodeService.addAspect(nodeRef, SignModel.ASPECT_SIGNED, aspectSignedProperties);
 			
 			// Neocom addition
-			final String currentUsername = authenticationService.getCurrentUserName();
+			//final String currentUsername = authenticationService.getCurrentUserName();
 			if (!nodeService.hasAspect(nodeRef, SignModel.ASPECT_SIGNER_USERNAMES)) {
 				Map<QName, Serializable> aspectSignerUsernamesProperties = new HashMap<QName, Serializable>();
-				aspectSignerUsernamesProperties.put(SignModel.PROP_SIGNER_USERNAMES_LIST, currentUsername);
+				aspectSignerUsernamesProperties.put(SignModel.PROP_SIGNER_USERNAMES_LIST, realUsername);
 				nodeService.addAspect(nodeRef, SignModel.ASPECT_SIGNER_USERNAMES, aspectSignerUsernamesProperties);
 			} else {
 				String signerUsernamesList = (String)nodeService.getProperty(nodeRef, SignModel.PROP_SIGNER_USERNAMES_LIST);
-				signerUsernamesList += "," + currentUsername;
+				signerUsernamesList += "," + realUsername;
 				nodeService.setProperty(nodeRef, SignModel.PROP_SIGNER_USERNAMES_LIST, signerUsernamesList);
 			}
 			
@@ -210,14 +213,6 @@ public class SaveSign extends AbstractWebScript {
 	    aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_NOT_AFTER, certificate.getNotAfter());
 	    aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_ISSUER, certificate.getIssuerX500Principal().toString());
 	    return aspectSignatureProperties;
-	}
-	
-	public AuthenticationService getAuthenticationService() {
-		return authenticationService;
-	}
-
-	public void setAuthenticationService(AuthenticationService authenticationService) {
-		this.authenticationService = authenticationService;
 	}
 	
 	public CheckOutCheckInService getCheckOutCheckInService() {

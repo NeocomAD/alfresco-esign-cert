@@ -10,7 +10,8 @@
 				if (!property)
 					property = record.node.properties["sign_signerUsernamesList"];
 				if(property) {
-					var userHasAlreadySignedDocument = property.indexOf(Alfresco.constants.USERNAME) != -1;
+					var propertyParts = property.split(",");
+					var userHasAlreadySignedDocument = propertyParts.indexOf(Alfresco.constants.USERNAME) != -1;
 					if(userHasAlreadySignedDocument) {
 						Alfresco.util.PopupManager.displayMessage({
 							text : this.msg("message.sign-action.already-signed"),
@@ -30,7 +31,7 @@
 			this.widgets.signDialog = new Alfresco.module.SimpleDialog("signDialog").setOptions({
 				width : "30em",
 				templateUrl : Alfresco.constants.URL_SERVICECONTEXT + "keensoft/sign/sign-dialog?nodeRef=" + record.nodeRef + "&mimeType=" + params["mimeType"],
-				actionUrl : Alfresco.constants.PROXY_URI + "keensoft/sign/save-sign",
+				actionUrl : Alfresco.constants.PROXY_URI + "keensoft/sign/save-sign?real_username=" + Alfresco.constants.USERNAME,
 				destroyOnHide : true,
 				onSuccess : {
 					fn : function signDialog_successCallback(response) {
