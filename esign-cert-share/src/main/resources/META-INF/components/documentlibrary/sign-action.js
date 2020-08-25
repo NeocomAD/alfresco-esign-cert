@@ -5,6 +5,7 @@
 			
 			var params = this.getAction(record, owner).params;
 			
+			/* duplicate signature detection and prevention
 			if (record.node.aspects.indexOf("sign:signerUsernames") != -1 || record.node.aspects.indexOf("sign_signerUsernames") != -1) {
 				var property = record.node.properties["sign:signerUsernamesList"];
 				if (!property)
@@ -21,6 +22,7 @@
 					}
 				}
 			}
+			*/
 			
 			this.widgets.waitDialog = Alfresco.util.PopupManager.displayMessage({
 				text : this.msg("document.loading"),
