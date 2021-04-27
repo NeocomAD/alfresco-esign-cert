@@ -35,7 +35,7 @@
    <bean id="evaluator.doclib.action.signed" parent="evaluator.doclib.action.hasAspect">
       <property name="aspects">
          <list>
-            <value>sign:signed</value>
+            <value>sign:signerUsernames</value>
          </list>
       </property>
    </bean>
