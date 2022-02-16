@@ -895,7 +895,8 @@ var MiniApplet = ( function ( window, undefined ) {
 			var MAX_NUMBER = 2147483648;
 
 			/* Caracteres validos para los ID de sesion */
-			var VALID_CHARS_TO_ID = "1234567890abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			//var VALID_CHARS_TO_ID = "1234567890abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var VALID_CHARS_TO_ID = "1234567890";	// since clienteafirma v1.7.2 non-digit characters are not allowed in the idsession
 
 			/* Genera un identificador de sesion. */
 			function generateNewIdSession () {
@@ -2089,7 +2090,8 @@ var MiniApplet = ( function ( window, undefined ) {
 			var MAX_NUMBER = 2147483648;
 
 			/* Caracteres validos para los ID de sesion */
-			var VALID_CHARS_TO_ID = "1234567890abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			//var VALID_CHARS_TO_ID = "1234567890abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var VALID_CHARS_TO_ID = "1234567890";	// since clienteafirma v1.7.2 non-digit characters are not allowed in the idsession
 
 			/* Genera un identificador de sesion. */
 			function generateNewIdSession () {
