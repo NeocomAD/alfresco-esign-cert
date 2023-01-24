@@ -62,6 +62,12 @@
         <dependency>
             <groupId>${alfresco.groupId}</groupId>
             <artifactId>alfresco-repository</artifactId>
+            <exclusions>
+				<exclusion>
+					<groupId>org.springframework.social</groupId>	<!-- excluding removed dependency to fix build process -->
+					<artifactId>spring-social-facebook</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
         
 		<!-- Google JSON -->
