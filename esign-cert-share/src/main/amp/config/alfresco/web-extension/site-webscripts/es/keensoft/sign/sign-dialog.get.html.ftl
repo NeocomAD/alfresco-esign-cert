@@ -72,11 +72,11 @@
 	      		var finalSignaturePosition = "${paramsPades}".replace(" ", "\t");
 	      		var options = {
 	      			"default": "${paramsPades}".replaceAll(" ", "\t"),
-	      			"firstPosition": "${firstSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " "),
-	      			"secondPosition": "${secondSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " "),
-	      			"thirdPosition": "${thirdSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " "),
-	      			"fourthPosition": "${fourthSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " "),
-	      			"fifthPosition": "${fifthSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ")
+	      			"firstPosition": "${firstSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ").replaceAll("{newline}", "\\\\n"),
+	      			"secondPosition": "${secondSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ").replaceAll("{newline}", "\\\\n"),
+	      			"thirdPosition": "${thirdSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ").replaceAll("{newline}", "\\\\n"),
+	      			"fourthPosition": "${fourthSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ").replaceAll("{newline}", "\\\\n"),
+	      			"fifthPosition": "${fifthSignaturePosition}".replaceAll(" ", "\t").replaceAll("{space}", " ").replaceAll("{newline}", "\\\\n")
 	      		};
 	      		var page = "last_page";
 	      		var documentMimetype = "${mimeType}";
