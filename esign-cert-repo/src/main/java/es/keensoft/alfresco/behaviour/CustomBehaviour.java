@@ -23,6 +23,8 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfPKCS7;
@@ -40,6 +42,8 @@ public class CustomBehaviour implements
 	private ContentService contentService;
 	
 	private static final String PADES = "PAdES";
+
+	private static Log log = LogFactory.getLog(CustomBehaviour.class);
 	
 	public void init() {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME, 
@@ -56,7 +60,7 @@ public class CustomBehaviour implements
 	@Override
 	public void onCreateNode(ChildAssociationRef childNodeRef) {
 
-		/*NodeRef node = childNodeRef.getChildRef();
+		NodeRef node = childNodeRef.getChildRef();
 		if (nodeService.exists(node)) {
 			ContentData contentData = (ContentData) nodeService.getProperty(node, ContentModel.PROP_CONTENT);
 			// Do this check only if the uploaded document is a PDF
@@ -83,7 +87,7 @@ public class CustomBehaviour implements
 					}
 				}
 			}
-		}*/
+		}
 	}
 
 	@Override
@@ -108,22 +112,31 @@ public class CustomBehaviour implements
 	        ks.load(null, null);
 	        ArrayList<Map<QName, Serializable>> aspects = new ArrayList<Map<QName, Serializable>>();
 	        for (String name : names) {
-	            PdfPKCS7 pk = af.verifySignature(name);
-	            X509Certificate certificate = pk.getSigningCertificate();
-	           
-	            //Set aspect properties for each signature
-	            Map<QName, Serializable> aspectSignatureProperties = new HashMap<QName, Serializable>(); 
-	            aspectSignatureProperties.put(SignModel.PROP_DATE, pk.getSignDate().getTime());
-	    		aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_PRINCIPAL, certificate.getSubjectX500Principal().toString());
-	    	    aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_SERIAL_NUMBER, certificate.getSerialNumber().toString());
-	    	    aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_NOT_AFTER, certificate.getNotAfter());
-	    	    aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_ISSUER, certificate.getIssuerX500Principal().toString());   
-	    	    aspects.add(aspectSignatureProperties);
+				try {
+					PdfPKCS7 pk = af.verifySignature(name);
+					X509Certificate certificate = pk.getSigningCertificate();
+				
+					//Set aspect properties for each signature
+					Map<QName, Serializable> aspectSignatureProperties = new HashMap<QName, Serializable>(); 
+					aspectSignatureProperties.put(SignModel.PROP_DATE, pk.getSignDate().getTime());
+					aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_PRINCIPAL, certificate.getSubjectX500Principal().toString());
+					aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_SERIAL_NUMBER, certificate.getSerialNumber().toString());
+					aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_NOT_AFTER, certificate.getNotAfter());
+					aspectSignatureProperties.put(SignModel.PROP_CERTIFICATE_ISSUER, certificate.getIssuerX500Principal().toString());   
+					aspects.add(aspectSignatureProperties);
+				} catch (Exception e) {
+					log.error(
+						String.format("retrieving signature certificate for name \"%s\" failed with error:", name),
+						e);
+				}
 	        }
 			return aspects;
 			
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			// do not throw runtime exception, this breaks document upload when a signature cannot be validated
+			//throw new RuntimeException(e);
+			log.error("retrieving digital signatures for document failed with error:", e);
+			return new ArrayList<Map<QName, Serializable>>();
 		}
 	}
 	
