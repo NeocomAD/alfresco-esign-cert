@@ -27,8 +27,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.PdfPKCS7;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.security.PdfPKCS7;
 
 import es.keensoft.alfresco.model.SignModel;
 
