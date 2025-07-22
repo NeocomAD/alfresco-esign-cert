@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
@@ -41,6 +42,7 @@ import com.google.gson.Gson;
 import es.keensoft.alfresco.model.SignModel;
 import es.keensoft.alfresco.sign.webscript.bean.BasicResponse;
 import es.keensoft.alfresco.sign.webscript.bean.SaveSignRequest;
+import es.keensoft.alfresco.util.Common;
 
 public class SaveSign extends AbstractWebScript {
 	
@@ -58,6 +60,7 @@ public class SaveSign extends AbstractWebScript {
 	private VersionService versionService;
 	private ContentService contentService;
 	private NodeService nodeService;
+	private Properties properties;
 	
 	@Override
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
@@ -151,6 +154,7 @@ public class SaveSign extends AbstractWebScript {
 	}
 	
 	private void storeSignPDF(NodeRef originalNodeRef, String signedData, Map<QName, Serializable> aspectProperties) throws IOException {
+		final NodeRef signatureNodeContainer = Common.getSignatureNodeContainer(nodeService, properties);
 		
 		String originalFileName = nodeService.getProperty(originalNodeRef, ContentModel.PROP_NAME).toString();
 		String signatureFileName = FilenameUtils.getBaseName(originalFileName) + "-" + System.currentTimeMillis() + "-" + PADES;
@@ -164,7 +168,7 @@ public class SaveSign extends AbstractWebScript {
 		
 		// Creating a node reference without type (no content and no folder), remains invisible for Share
 		NodeRef signatureNodeRef = nodeService.createNode(
-				nodeService.getPrimaryParent(originalNodeRef).getParentRef(),
+				signatureNodeContainer != null ? signatureNodeContainer : nodeService.getPrimaryParent(originalNodeRef).getParentRef(),
 				ContentModel.ASSOC_CONTAINS, 
 				QName.createQName(signatureFileName), 
 				ContentModel.TYPE_CMOBJECT).getChildRef();
@@ -247,4 +251,11 @@ public class SaveSign extends AbstractWebScript {
 		this.nodeService = nodeService;
 	}
 
+	public Properties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
 }

@@ -7,6 +7,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
@@ -31,6 +32,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.security.PdfPKCS7;
 
 import es.keensoft.alfresco.model.SignModel;
+import es.keensoft.alfresco.util.Common;
 
 public class CustomBehaviour implements 
     NodeServicePolicies.OnDeleteAssociationPolicy, 
@@ -40,7 +42,8 @@ public class CustomBehaviour implements
 	private NodeService nodeService;
 	private VersionService versionService;
 	private ContentService contentService;
-	
+	private Properties properties;
+
 	private static final String PADES = "PAdES";
 
 	private static Log log = LogFactory.getLog(CustomBehaviour.class);
@@ -59,7 +62,7 @@ public class CustomBehaviour implements
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childNodeRef) {
-
+		final NodeRef signatureNodeContainer = Common.getSignatureNodeContainer(nodeService, properties);
 		NodeRef node = childNodeRef.getChildRef();
 		if (nodeService.exists(node)) {
 			ContentData contentData = (ContentData) nodeService.getProperty(node, ContentModel.PROP_CONTENT);
@@ -74,7 +77,7 @@ public class CustomBehaviour implements
 					
 						// Creating a node reference without type (no content and no folder): remains invisible for Share
 						NodeRef signatureNodeRef = nodeService.createNode(
-								nodeService.getPrimaryParent(node).getParentRef(),
+								signatureNodeContainer != null ? signatureNodeContainer : nodeService.getPrimaryParent(node).getParentRef(),
 								ContentModel.ASSOC_CONTAINS, 
 								QName.createQName(signatureFileName), 
 								ContentModel.TYPE_CMOBJECT).getChildRef();
@@ -139,8 +142,7 @@ public class CustomBehaviour implements
 			return new ArrayList<Map<QName, Serializable>>();
 		}
 	}
-	
-	
+
 	public PolicyComponent getPolicyComponent() {
 		return policyComponent;
 	}
@@ -173,5 +175,11 @@ public class CustomBehaviour implements
 		this.contentService = contentService;
 	}
 
+	public Properties getProperties() {
+		return properties;
+	}
 
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
 }
