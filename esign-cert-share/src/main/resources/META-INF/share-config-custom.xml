@@ -1,6 +1,6 @@
 <alfresco-config>
 
-	<config evaluator="aspect" condition="sign:signed">
+	<!--<config evaluator="aspect" condition="sign:signed">
 		<forms>
 			<form>
 				<field-visibility>
@@ -16,7 +16,7 @@
 				</appearance>
 			</form>
 		</forms>
-	</config>
+	</config>-->
 	
 	<config evaluator="aspect" condition="sign:signature">
 		<forms>
